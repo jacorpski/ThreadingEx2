@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace FindSmallest
 {
@@ -43,8 +44,10 @@ namespace FindSmallest
         {
             foreach (int[] data in Data)
             {
-                new Thread(() => ThreadingFindSmallest(data)).Start();
+                Task.Run(() => ThreadingFindSmallest(data));
             }
+
+            Console.ReadLine();
         }
     }
 }
