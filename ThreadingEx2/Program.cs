@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace FindSmallest
 {
@@ -31,12 +32,18 @@ namespace FindSmallest
             return smallestSoFar;
         }
 
+        private static void ThreadingFindSmallest(int[] numbers)
+        {
+            int smallest = FindSmallest(numbers);
+
+            Console.WriteLine("\t"+ String.Join(", ", numbers) +"\n"+ smallest);
+        }
+
         static void Main()
         {
             foreach (int[] data in Data)
             {
-                int smallest = FindSmallest(data);
-                Console.WriteLine("\t" + String.Join(", ", data) + "\n-> " + smallest);
+                new Thread(() => ThreadingFindSmallest(data)).Start();
             }
         }
     }
