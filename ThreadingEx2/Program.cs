@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,6 +15,28 @@ namespace FindSmallest
             new[]{3,2,8,9,-1},
             new[]{1, 22,1,9,-3, 5}
         };
+        private static List<Task<int>> taskList = new List<Task<int>>();
+
+        static void Main()
+        {
+            foreach (int[] data in Data)
+            {
+                Task<int> task = new Task<int>(() => ThreadingFindSmallest(data));
+
+                taskList.Add(task);
+
+                task.Start();
+            }
+
+            for(int i = 0; i <= Data[0].Length; i++)
+            {
+                int result = taskList[i].Result;
+
+                Console.WriteLine("\t" + String.Join(", ", Data[i]) + "\n" + result);
+            }
+
+            Console.ReadLine();
+        }
 
         private static int FindSmallest(int[] numbers)
         {
@@ -33,21 +56,11 @@ namespace FindSmallest
             return smallestSoFar;
         }
 
-        private static void ThreadingFindSmallest(int[] numbers)
+        private static int ThreadingFindSmallest(int[] numbers)
         {
             int smallest = FindSmallest(numbers);
 
-            Console.WriteLine("\t"+ String.Join(", ", numbers) +"\n"+ smallest);
-        }
-
-        static void Main()
-        {
-            foreach (int[] data in Data)
-            {
-                Task.Run(() => ThreadingFindSmallest(data));
-            }
-
-            Console.ReadLine();
+            return smallest;
         }
     }
 }
